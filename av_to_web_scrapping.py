@@ -45,22 +45,17 @@ def get_content(html_text):
         # иногда меняется класс (см выше), потому через регулярные вырадения:
         items = soup.find_all('div', class_=re.compile(r"iva-item-root-[\w]{5}"))
         for item in items:
-            try:
-                item_id = int(item.get('data-item-id'))
-            except AttributeError:
-                item_id = ''
+            item_id = int(item.get('data-item-id', ''))
             try:
                 name = item.find(attrs={"itemprop": "name"}).get_text(strip=True)
             except AttributeError:
                 name = 'Нет данных'
+
+            temp = item.find(attrs={"itemprop": "price"}).get('content', 'Нет данных')
             try:
-                temp = item.find(attrs={"itemprop": "price"}).get('content')    # иногда вместо цифр "Бесплатно"
-                try:
-                    price = int(temp)
-                except ValueError:
-                    price = temp
-            except AttributeError:
-                price = 'Нет данных'
+                price = int(temp)
+            except ValueError:           # иногда вместо цифр "Бесплатно"
+                price = temp
             try:
                 place = item.find("div", class_="geo-georeferences-Yd_m5 text-text-LurtD text-size-s-BxGpL")\
                                     .find_next('span').find_next('span').get_text()
@@ -70,10 +65,8 @@ def get_content(html_text):
                 data_maker = item.find(attrs={"data-marker": "item-date"}).get_text(strip=True)
             except AttributeError:
                 data_maker = 'Нет данных'
-            try:
-                link = HOST + item.find('a', href=True).get('href')
-            except AttributeError:
-                link = 'Нет данных'
+            link = HOST + item.find('a', href=True).get('href', 'Нет данных')
+
             content.append({'id': item_id, 'item': name, 'price': price, 'place': place, 'data_maker': data_maker,
                             'link': link})
     except AttributeError:
@@ -147,7 +140,7 @@ def main():
     url = url.strip()  # на всякий случай обрезаем пробелы в начале и конце страницы
 
     # парсим сайт
-    #content = parse(url)
+    content = parse(url)
 
     # сохраняем результаты
     str_one = str(content[0]['item'])

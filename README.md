@@ -49,8 +49,7 @@
 * [XlsxWriter 3.0.1](https://pypi.org/project/XlsxWriter/) - для установки введите в терминале `pip3 install XlsxWriter`
 
 Если Вы пользователь Microsoft Windows, то вместо `pip3 install ...` следует использовать  `pip install ...`
-
-Скачайте архив с программой, распакуйте. Откройте файл `av_to_web_scrapping.py` любым редактором и раскомментируйте строку 150 `#content = parse(url)`, для этого удалите символ `#`, сохраните файл. 
+ 
 Запустите консоль, перейдите в папку с программой и выполните `python3 av_to_web_scrapping.py` или  `python av_to_web_scrapping.py` - для Windows.
 
 
